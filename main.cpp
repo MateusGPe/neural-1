@@ -62,16 +62,16 @@ void sumHiddenInput(int nH, int n, int m, HiddenLayer *h) {
 		h[nH].node[i] = 0;
 		for(int j = 0; j < m; ++j)
 			h[nH].node[i] += h[nH].inEdge[j][i];
-		// h[nH].node[i] = activationFunction(h[nH].node[i]);
+		h[nH].node[i] = activationFunction(h[nH].node[i]);
 	}
 }
 
 void sumHiddenOutput(int nH, int n, int nO, HiddenLayer *h, OutLayer o) {
 	for(int i = 0; i < nO; ++i) {
 		o.node[i] = 0;
-		for(int j = 0; j < nO; ++j)
+		for(int j = 0; j < n; ++j)
 			o.node[i] += h[nH].node[j] * h[nH].outEdge[j][i];
-		// o.node[i] = activationFunction(o.node[i]);
+		o.node[i] = activationFunction(o.node[i]);
 	}
 }
 
@@ -81,21 +81,26 @@ void randomMatrix(int n, int m, double **M) {
 			M[i][j] = randomDouble();
 }
 
-void printVector(int n, double *v) {
-	for(int i = 0; i < n; ++i) printf("%0.2lf\t", v[i]);
+void printMatrix(int n, int m, double **M) {
+	for(int i = 0; i < n; ++i) {
+		for(int j = 0; j < m; ++j)
+			printf("%.2lf\t", M[i][j]);
+		printf("\n");
+	}
 	printf("\n");
 }
 
-void printMatrix(int n, int m, double **M) {
-	for(int i = 0; i < m; ++i)
-		printf("\t%d", i + 1);
-	printf("\n");
+void printVector(int n, double *v) {
+	for(int i = 0; i < n; ++i) printf("%0.2lf\t", v[i]);
+	printf("\n\n");
+}
 
-	for(int i = 0; i < n; ++i) {
-		printf("%d", i + 1);
-		for(int j = 0; j < m; ++j)
-			printf("\t%0.2lf", M[i][j]);
-		printf("\n");
+void printGraphData(int step, int left, int right, double **M) {
+	for(int i = 0; i < left; ++i) {
+		for(int j = 0; j < right; ++j) {
+			printf("%d\t%d\n", step - 1, i);
+			printf("%d\t%d\n\n", step, j); //, M[i][j]);
+		}
 	}
 }
 
@@ -120,7 +125,7 @@ int main() {
 	for(int i = 0; i < brain.numHiddenLayers; ++i) {
 		if(i == 0) {
 			initVectorDouble(brain.nodesHidden[i], &brain.hidden[i].node);
-			initMatrixDouble(brain.nodesHidden[i], brain.numInputNodes, &brain.hidden[i].inEdge);
+			initMatrixDouble(brain.numInputNodes, brain.nodesHidden[i], &brain.hidden[i].inEdge);
 			initMatrixDouble(brain.nodesHidden[i], brain.numOutputNodes, &brain.hidden[i].outEdge);	
 		}
 	}
@@ -129,17 +134,24 @@ int main() {
 	srand(time(NULL));
 
 	for(int i = 0; i < brain.numHiddenLayers; ++i) {
-		randomMatrix(brain.nodesHidden[i], brain.numInputNodes, brain.hidden[i].inEdge);
+		randomMatrix(brain.numInputNodes, brain.nodesHidden[i], brain.hidden[i].inEdge);
 		randomMatrix(brain.nodesHidden[i], brain.numOutputNodes, brain.hidden[i].outEdge);
 
-		printMatrix(brain.nodesHidden[i], brain.numInputNodes, brain.hidden[i].inEdge);
-		printMatrix(brain.nodesHidden[i], brain.numOutputNodes, brain.hidden[i].outEdge);
+		/*
+		printGraphData(1, brain.numInputNodes, brain.nodesHidden[i], brain.hidden[i].inEdge);
+		printGraphData(2, brain.nodesHidden[i], brain.numOutputNodes, brain.hidden[i].outEdge);
+		*/
+		
+		// printMatrix(brain.numInputNodes, brain.nodesHidden[i], brain.hidden[i].inEdge);
 
 		sumHiddenInput(i, brain.nodesHidden[i], brain.numInputNodes, &brain.hidden[i]);
 		printVector(brain.nodesHidden[i], brain.hidden[i].node);
 
+		// printMatrix(brain.nodesHidden[i], brain.numOutputNodes, brain.hidden[i].outEdge);
+
 		sumHiddenOutput(i, brain.nodesHidden[i], brain.numOutputNodes, &brain.hidden[i], brain.output);
 		printVector(brain.numOutputNodes, brain.output.node);
+		
 	}
 
 
