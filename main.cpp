@@ -137,17 +137,17 @@ int main() {
 		randomMatrix(brain.numInputNodes, brain.nodesHidden[i], brain.hidden[i].inEdge);
 		randomMatrix(brain.nodesHidden[i], brain.numOutputNodes, brain.hidden[i].outEdge);
 
-		/*
+		
 		printGraphData(1, brain.numInputNodes, brain.nodesHidden[i], brain.hidden[i].inEdge);
 		printGraphData(2, brain.nodesHidden[i], brain.numOutputNodes, brain.hidden[i].outEdge);
-		*/
 		
-		// printMatrix(brain.numInputNodes, brain.nodesHidden[i], brain.hidden[i].inEdge);
+		
+		printMatrix(brain.numInputNodes, brain.nodesHidden[i], brain.hidden[i].inEdge);
 
 		sumHiddenInput(i, brain.nodesHidden[i], brain.numInputNodes, &brain.hidden[i]);
 		printVector(brain.nodesHidden[i], brain.hidden[i].node);
 
-		// printMatrix(brain.nodesHidden[i], brain.numOutputNodes, brain.hidden[i].outEdge);
+		printMatrix(brain.nodesHidden[i], brain.numOutputNodes, brain.hidden[i].outEdge);
 
 		sumHiddenOutput(i, brain.nodesHidden[i], brain.numOutputNodes, &brain.hidden[i], brain.output);
 		printVector(brain.numOutputNodes, brain.output.node);
