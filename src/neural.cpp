@@ -35,14 +35,14 @@ struct Vector {
     }
 
     void _print() {
-        for (int i = 0; i < dim; ++i) {
+        for (unsigned int i = 0; i < dim; ++i) {
             printf("%+2.2lf ", vec[i]);
         }
         printf("\n");
     }
 
     void random() {
-        for (int i = 0; i < dim; ++i) {
+        for (unsigned int i = 0; i < dim; ++i) {
             vec[i] = (double)rand() / (double)RAND_MAX;
         }
     }
@@ -60,23 +60,23 @@ struct Layer {
             exit(1);
         }
 
-        for (int i = 0; i < in_n; ++i) {
+        for (unsigned int i = 0; i < in_n; ++i) {
             in[i]._init(in_n);
         }
-        for (int i = 0; i < out_n; ++i) {
+        for (unsigned int i = 0; i < out_n; ++i) {
             out[i]._init(in_n);
         }
     }
 
     void _free() {
         if (in != NULL) {
-            for (int i = 0; i < in[0].dim; ++i) {
+            for (unsigned int i = 0; i < in[0].dim; ++i) {
                 in[i]._free();
             }
         }
 
         if (out != NULL) {
-            for (int i = 0; i < out[0].dim; ++i) {
+            for (unsigned int i = 0; i < out[0].dim; ++i) {
                 out[i]._free();
             }
         }
@@ -86,7 +86,7 @@ struct Layer {
 
     void _print() {
         if (in != NULL) {
-            for (int i = 0; i < in[0].dim; ++i) {
+            for (unsigned int i = 0; i < in[0].dim; ++i) {
                 in[i]._print();
             }
         }
@@ -94,7 +94,7 @@ struct Layer {
         nodes._print();
         
         if (out != NULL) {
-            for (int i = 0; i < out[0].dim; ++i) {
+            for (unsigned int i = 0; i < out[0].dim; ++i) {
                 out[i]._print();
             }
         }
