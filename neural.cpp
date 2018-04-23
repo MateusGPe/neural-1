@@ -3,6 +3,21 @@
 #include <ctime>
 #include <cmath>
 
+/*
+    void sumHiddenInput(int nH, int n, int m, HiddenLayer *h) {
+        for(int i = 0; i < n; ++i) {
+            h[nH].node[i] = 0;
+            for(int j = 0; j < m; ++j)
+                h[nH].node[i] += h[nH].inEdge[j][i];
+            h[nH].node[i] = activationFunction(h[nH].node[i]);
+        }
+    }
+*/
+
+double activationFunction(double x) {
+	return 1. / (1. + exp(-x)); 
+}
+
 struct Vector {
     unsigned int dim;
     double *vec;
