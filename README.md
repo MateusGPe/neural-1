@@ -9,13 +9,12 @@ A C/C++ compiler and gnuplot installed if you want to visualize the data.
 ## Compile & run
 
 To compile 
-
 ```bash
 cd src
-g++ -Wall -ansi neural.cpp -o neural
+g++ -Wall -ansi neural.cpp
 ```
-to run:
 
+Then to run
 ```bash
-./neural
+./a.out
 ```
