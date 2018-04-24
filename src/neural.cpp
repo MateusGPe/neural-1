@@ -26,6 +26,7 @@ struct Vector {
         dim = n;
         vec = (double *)malloc(dim * sizeof(double));
         if (vec == NULL) {
+            fprintf(stderr, "Error allocating memory (Vector._init)\n");
             exit(1);
         }
     }
@@ -35,8 +36,9 @@ struct Vector {
     }
 
     void _print() {
+        // printf("Size of vector: %lu\n", sizeof(vec));
         for (unsigned int i = 0; i < dim; ++i) {
-            printf("%+2.2lf ", vec[i]);
+            printf("%+1.4lf ", vec[i]);
         }
         printf("\n");
     }
@@ -56,7 +58,12 @@ struct Layer {
 
         in = (Vector *)malloc(in_n * sizeof(Vector));
         out = (Vector *)malloc(out_n * sizeof(Vector));
-        if (in == NULL || out == NULL) {
+        if (in == NULL) {
+            fprintf(stderr, "Error allocating memory (Layer._init -> in is NULL)\n");
+            exit(1);
+        }
+        if (out == NULL) {
+            fprintf(stderr, "Error allocating memory (Layer._init -> out is NULL)\n");
             exit(1);
         }
 
@@ -64,37 +71,44 @@ struct Layer {
             in[i]._init(in_n);
         }
         for (unsigned int i = 0; i < out_n; ++i) {
-            out[i]._init(in_n);
+            out[i]._init(out_n);
         }
     }
 
     void _free() {
+        nodes._free();
+
         if (in != NULL) {
             for (unsigned int i = 0; i < in[0].dim; ++i) {
                 in[i]._free();
             }
         }
+        free(in);
 
         if (out != NULL) {
             for (unsigned int i = 0; i < out[0].dim; ++i) {
                 out[i]._free();
             }
         }
-
-        nodes._free();
+        free(out);
     }
 
     void _print() {
         if (in != NULL) {
+            printf("In\n");
             for (unsigned int i = 0; i < in[0].dim; ++i) {
+                // printf("%d\n", i);
                 in[i]._print();
             }
         }
 
+        printf("Nodes\n");
         nodes._print();
         
         if (out != NULL) {
+            printf("Out\n");
             for (unsigned int i = 0; i < out[0].dim; ++i) {
+                // printf("%d\n", i);
                 out[i]._print();
             }
         }
@@ -103,8 +117,18 @@ struct Layer {
         printf("\n");
     }
 
-    void random_nodes() {
-        nodes.random();
+    void random_weights() {
+        if (in != NULL) {
+            for (unsigned int i = 0; i < in[0].dim; ++i) {
+                in[i].random();
+            }
+        }
+        
+        if (out != NULL) {
+            for (unsigned int i = 0; i < out[0].dim; ++i) {
+                out[i].random();
+            }
+        }
     }
 };
 
@@ -124,19 +148,28 @@ struct Brain {
     }
 
     void _print() {
+        printf("\tINPUT LAYER\n");
         in._print();
+
+        printf("\tHIDDEN LAYER/S\n");
         hid._print();
+
+        printf("\tOUTPUT LAYER\n");
         out._print();
     }
 
     void random() {
-        in.random_nodes();
-        hid.random_nodes();
-        out.random_nodes();
+        in.random_weights();
+        hid.random_weights();
+        out.random_weights();
+    }
+
+    void _pprint() {
+        
     }
 };
 
-int main (void) {
+int main (int argc, const char **argv) {
     Brain test;
     srand(time(NULL));
 
